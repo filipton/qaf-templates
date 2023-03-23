@@ -1,5 +1,3 @@
-# FN-Stack app
+# [[PROJECT_NAME]]
 
 This app is created using experimental stack called FN-Stack!
-TODO: Change this file
-TODO: Add base here
