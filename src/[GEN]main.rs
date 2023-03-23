@@ -17,6 +17,7 @@ async fn main() -> std::io::Result<()> {
 
     let state = AppState { pool };
 
+    println!("Starting server at {}", options.bind_address);
     HttpServer::new(move || {
         App::new()
             .app_data(Data::new(state.clone()))
