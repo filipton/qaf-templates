@@ -1,26 +1,28 @@
 use actix_web::{web::Data, App, HttpServer};
 mod actix_scope;
 use actix_scope::generated_scope;
-use [[RUST_PROJECT_NAME]]::{AppState, StartupOptions};
+use rust_project_name_t::{AppState, StartupOptions};
 
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
     dotenvy::dotenv().ok();
     let options = StartupOptions::new();
+    let mut state = AppState::default();
 
-    //[[IF DATABASE Postgres(SQLX)]]
+    /*[[IF DATABASE Postgres(SQLX)]]
     let pool = sqlx::postgres::PgPoolOptions::new()
         .max_connections(options.max_connections)
         .connect(&options.connection_string)
         .await
         .unwrap();
 
-    let state = AppState { pool };
-    //[[ENDIF]]
-    
-    //[[IF DATABASE Off]]
-    let state = AppState {};
-    //[[ENDIF]]
+    state.pool = Some(pool);
+
+    /*[[IF WEBSOCKETS Tungstenite]]
+    println!("dsadsasa");
+    [[ENDIF]]*/
+
+    [[ENDIF]]*/
 
     println!("Starting server at {}", options.bind_address);
     HttpServer::new(move || {

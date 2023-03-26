@@ -1,5 +1,5 @@
 [package]
-name = "[[PROJECT_NAME]]"
+name = "rust_project_name_t"
 version = "0.1.0"
 edition = "2021"
 build = "build.rs"
