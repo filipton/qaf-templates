@@ -2,27 +2,27 @@ use actix_web::{get, post, web::Data, web::Path, HttpResponse, Responder};
 
 use crate::AppState;
 
-//[[IF DATABASE Postgres(SQLX)]]
+/*[[IF DATABASE Postgres(SQLX)]]
 #[derive(Debug, sqlx::FromRow)]
 pub struct Test {
     pub id: i32,
     pub time: Option<i64>,
 }
-//[[ENDIF]]
+[[ENDIF]]*/
 
 #[get("/")]
 pub async fn get_test(data: Data<AppState>) -> impl Responder {
-    //[[IF DATABASE Postgres(SQLX)]]
+    /*[[IF DATABASE Postgres(SQLX)]]
     // SQLX EXAMPLE
     /*
-       let mut conn = data.pool.acquire().await.unwrap();
+    let mut conn = data.pool.acquire().await.unwrap();
 
-       let rows = sqlx::query_as!(Test, "SELECT * FROM tests")
-       .fetch_all(&mut conn)
-       .await
-       .unwrap();
-       */
-    //[[ENDIF]]
+    let rows = sqlx::query_as!(Test, "SELECT * FROM tests")
+    .fetch_all(&mut conn)
+    .await
+    .unwrap();
+    */
+    [[ENDIF]]*/
 
     return HttpResponse::Ok().body("It works!!!");
 }
@@ -34,7 +34,7 @@ pub async fn get_test_name(name: Path<String>) -> impl Responder {
     return HttpResponse::Ok().body(format!("Hello {}!", name));
 }
 
-//[[IF DATABASE Postgres(SQLX)]]
+/*[[IF DATABASE Postgres(SQLX)]]
 /*
 #[actix_web::post("/")]
 pub async fn post_test(data: Data<AppState>) -> impl Responder {
@@ -50,7 +50,7 @@ pub async fn post_test(data: Data<AppState>) -> impl Responder {
     return HttpResponse::Ok().body(format!("Hello {:?}!", row));
 }
 */
-//[[ENDIF]]
+[[ENDIF]]*/
 
 // THIS WONT BE ADDED TO THE ACTIX SCOPE
 pub async fn get_post_indedsadsadx() -> impl Responder {

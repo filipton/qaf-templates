@@ -17,11 +17,10 @@ async fn main() -> std::io::Result<()> {
         .unwrap();
 
     state.pool = Some(pool);
-
-    /*[[IF WEBSOCKETS Tungstenite]]
-    println!("dsadsasa");
     [[ENDIF]]*/
 
+    /*[[IF WEBSOCKETS Tungstenite]]
+    println!("Tungstenite here...");
     [[ENDIF]]*/
 
     println!("Starting server at {}", options.bind_address);
