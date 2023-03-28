@@ -10,6 +10,9 @@ pub struct StartupOptions {
     pub connection_string: String,
     pub max_connections: u32,
     [[ENDIF]]*/
+    //[[IF WEBSOCKET Tungstenite]]
+    pub websocket_bind_address: String,
+    //[[ENDIF]]
     pub bind_address: String,
 }
 
@@ -25,6 +28,10 @@ impl StartupOptions {
                 .parse()
                 .unwrap(),
             [[ENDIF]]*/
+            //[[IF WEBSOCKET Tungstenite]]
+            websocket_bind_address: std::env::var("WEBSOCKET_BIND_ADDRESS")
+                .unwrap_or("127.0.0.1:8081".to_string()),
+            //[[ENDIF]]
             bind_address: std::env::var("BIND_ADDRESS").unwrap_or("127.0.0.1:8080".to_string()),
         }
     }

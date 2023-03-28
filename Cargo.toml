@@ -18,10 +18,18 @@ sqlx = { version = "0.6.2", features = [
     "runtime-tokio-rustls",
 ] }
 #[[ENDIF]]
-#[[IF WEBSOCKETS Tungstenite]]
+#[[IF WEBSOCKET Tungstenite]]
 tokio-tungstenite = "0.18.0"
+futures-channel = "0.3.27"
+futures-util = "0.3.27"
 #[[ENDIF]]
 
 [build-dependencies]
 syn = { version = "1.0.109", features = ["full"] }
 rust-format = "0.3.4"
+
+[profile.release]
+strip = true
+opt-level = "s"
+lto = true
+codegen-units = 1
