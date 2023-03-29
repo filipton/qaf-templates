@@ -23,7 +23,7 @@ fn main() -> Result<()> {
 
     let entries: PageEntry = PageEntry::generate(pages, &config)?;
     let lib_str = entries.generate_mods()?;
-    let services_str = entries.generate_services();
+    let services_str = entries.generate_services(&config);
 
     let services = format!(
         r#"
@@ -98,21 +98,19 @@ impl PageEntry {
 
     pub fn generate_mods(&self) -> Result<String> {
         let mut out = String::new();
-
         if self.is_dir && self.children.len() == 0 {
             return Ok(out);
         }
 
         out += &format!("pub mod {}", self.name);
-
         if self.children.len() > 0 {
-            out += "{{ \n";
+            out += "{ \n";
 
             for child in self.children.clone() {
                 out += &child.generate_mods()?;
             }
 
-            out += "}} \n";
+            out += "} \n";
         } else {
             out += "; \n";
         }
@@ -120,19 +118,17 @@ impl PageEntry {
         Ok(out)
     }
 
-    pub fn generate_services(&self) -> String {
+    pub fn generate_services(&self, config: &BuildrsConfig) -> String {
         let mut tmp = String::from("web::scope(\"\")");
 
         for child in &self.children {
             if child.children.len() > 0 {
-                tmp += &*child._generate_services(PathBuf::from("src/pages"), "pages::");
+                tmp += &*child._generate_services(PathBuf::from("src/pages"), config);
                 continue;
             }
 
-            let mut path = PathBuf::from(PAGES_DIR);
-            path.push(format!("{}.rs", child.name));
-
-            for endpoint in PageEntry::get_actix_endpoints(path).unwrap_or(vec![]) {
+            let child_path = PathBuf::from(PAGES_DIR).join(format!("{}.rs", child.name));
+            for endpoint in PageEntry::get_actix_endpoints(child_path).unwrap_or(vec![]) {
                 tmp += &format!(".service(pages::{}::{})", child.name, endpoint);
             }
         }
@@ -140,36 +136,39 @@ impl PageEntry {
         return tmp;
     }
 
-    fn _generate_services(&self, path: PathBuf, use_path: &str) -> String {
+    fn _generate_services(&self, path: PathBuf, config: &BuildrsConfig) -> String {
         let mut tmp = String::new();
+        let path = path.join(&self.name);
 
-        let use_path = format!("{}{}::", use_path, self.name);
-
-        let mut path = path;
-        path.push(&self.name);
-
-        tmp += &format!(".service(web::scope(\"{}\")\n", self.name);
+        if !config.disable_scopes {
+            tmp += &format!(".service(web::scope(\"{}\")\n", self.name);
+        }
 
         for child in self.children.clone() {
             if child.children.len() > 0 {
-                tmp += &child._generate_services(path.clone(), &use_path);
+                tmp += &child._generate_services(path.clone(), config);
                 continue;
             }
 
-            let mut tmp_path = path.clone();
-            tmp_path.push(format!("{}.rs", child.name));
-            let tmp_use_path = format!("{}{}::", use_path, child.name);
+            let tmp_path = path.clone().join(format!("{}.rs", child.name));
+            let use_path = path
+                .to_str()
+                .unwrap()
+                .replacen("src/", "", 1)
+                .replace("/", "::");
 
             for endpoint in PageEntry::get_actix_endpoints(tmp_path).unwrap_or(vec![]) {
-                tmp += &format!(".service({}{})\n", tmp_use_path, endpoint);
+                tmp += &format!(".service({}::{}::{})\n", use_path, child.name, endpoint);
             }
         }
 
-        tmp += ")";
+        if !config.disable_scopes {
+            tmp += ")";
+        }
         return tmp;
     }
 
-    pub fn get_actix_endpoints(path: PathBuf) -> Result<Vec<String>, std::io::Error> {
+    pub fn get_actix_endpoints(path: PathBuf) -> Result<Vec<String>> {
         let file_content = std::fs::read_to_string(path)?;
 
         let syntax = syn::parse_file(&file_content).unwrap();
