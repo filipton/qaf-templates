@@ -1,4 +1,4 @@
-#[derive(Clone, Debug, Default)]
+#[derive(Clone, Debug)]
 pub struct AppState {
     /*[[IF DATABASE Postgres(SQLX)]]
     pub pool: sqlx::postgres::PgPool,

@@ -30,7 +30,7 @@ async fn main() -> std::io::Result<()> {
     [[ENDIF]]*/
 
     //[[IF DATABASE Off]]
-    let state = AppState::default();
+    let state = AppState {};
     //[[ENDIF]]
 
     /*[[IF WEBSOCKET Tungstenite]]
