@@ -7,18 +7,17 @@ use rust_project_name_t::{AppState, StartupOptions};
 
 //[[ENDIF]]
 
-//[[IF WEBSOCKET Tungstenite]]
+/*[[IF WEBSOCKET Tungstenite]]
 mod websockets;
 use std::{collections::HashMap, sync::Mutex};
 use tokio::net::TcpListener;
 use websockets::PeerMap;
-//[[ENDIF]]
+[[ENDIF]]*/
 
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
     dotenvy::dotenv().ok();
     let options = StartupOptions::new();
-    let mut state = AppState::default();
 
     /*[[IF DATABASE Postgres(SQLX)]]
     let pool = sqlx::postgres::PgPoolOptions::new()
@@ -27,10 +26,14 @@ async fn main() -> std::io::Result<()> {
         .await
         .unwrap();
 
-    state.pool = Some(pool);
+    let state = AppState { pool };
     [[ENDIF]]*/
 
-    //[[IF WEBSOCKET Tungstenite]]
+    //[[IF DATABASE Off]]
+    let state = AppState::default();
+    //[[ENDIF]]
+
+    /*[[IF WEBSOCKET Tungstenite]]
     let ws_state = PeerMap::new(Mutex::new(HashMap::new()));
 
     tokio::spawn(async move {
@@ -49,7 +52,7 @@ async fn main() -> std::io::Result<()> {
             ));
         }
     });
-    //[[ENDIF]]
+    [[ENDIF]]*/
 
     println!("Starting server at {}", options.bind_address);
     HttpServer::new(move || {

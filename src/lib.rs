@@ -1,7 +1,7 @@
 #[derive(Clone, Debug, Default)]
 pub struct AppState {
     /*[[IF DATABASE Postgres(SQLX)]]
-    pub pool: Option<sqlx::postgres::PgPool>,
+    pub pool: sqlx::postgres::PgPool,
     [[ENDIF]]*/
 }
 
