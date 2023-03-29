@@ -1,10 +1,13 @@
 const PAGES_DIR: &'static str = "src/pages";
 const SCOPE_PATH: &'static str = "src/actix_scope.rs";
 
-use core::fmt;
+use anyhow::Result;
+use config::BuildrsConfig;
 use rust_format::{Formatter, RustFmt};
 use std::path::PathBuf;
 use syn::ItemFn;
+
+mod config;
 
 #[derive(Debug, Clone)]
 struct PageEntry {
@@ -13,11 +16,13 @@ struct PageEntry {
     children: Vec<PageEntry>,
 }
 
-fn main() {
+fn main() -> Result<()> {
+    let config: BuildrsConfig = BuildrsConfig::from_file(PathBuf::from("fnstack.json"))?;
+
     let pages = PathBuf::from(PAGES_DIR);
 
-    let entries: PageEntry = PageEntry::generate(pages);
-    let lib_str = format!("{}", entries);
+    let entries: PageEntry = PageEntry::generate(pages, &config)?;
+    let lib_str = entries.generate_mods()?;
     let services_str = entries.generate_services();
 
     let services = format!(
@@ -42,23 +47,26 @@ fn main() {
         lib_str, services
     );
 
-    main_template_content = RustFmt::new().format_str(main_template_content).unwrap();
-    std::fs::write(SCOPE_PATH, main_template_content).unwrap();
+    main_template_content = RustFmt::new().format_str(main_template_content)?;
+    std::fs::write(SCOPE_PATH, main_template_content)?;
 
     println!("cargo:rerun-if-changed=build.rs");
+    println!("cargo:rerun-if-changed=fnstack.json");
     println!("cargo:rerun-if-changed=src/pages");
+
+    Ok(())
 }
 
 impl PageEntry {
-    pub fn generate(dir: PathBuf) -> PageEntry {
+    pub fn generate(dir: PathBuf, config: &BuildrsConfig) -> Result<PageEntry> {
         let mut children: Vec<PageEntry> = Vec::new();
 
-        for entry in dir.read_dir().unwrap() {
+        for entry in dir.read_dir()? {
             if let Ok(entry) = entry {
-                let file_type = entry.file_type().unwrap();
+                let file_type = entry.file_type()?;
 
                 if file_type.is_dir() {
-                    children.push(PageEntry::generate(entry.path()));
+                    children.push(PageEntry::generate(entry.path(), config)?);
                 } else if file_type.is_file() {
                     let file_name = entry
                         .file_name()
@@ -70,7 +78,7 @@ impl PageEntry {
 
                     children.push(PageEntry {
                         name: file_name,
-                        is_dir: entry.file_type().unwrap().is_dir(),
+                        is_dir: entry.file_type()?.is_dir(),
                         children: vec![],
                     })
                 }
@@ -81,11 +89,35 @@ impl PageEntry {
         let dir_name = dir.file_name().unwrap().to_str().unwrap().to_owned();
         children.sort_by_key(|k| k.is_dir);
 
-        return PageEntry {
+        return Ok(PageEntry {
             name: dir_name,
             is_dir: true,
             children,
-        };
+        });
+    }
+
+    pub fn generate_mods(&self) -> Result<String> {
+        let mut out = String::new();
+
+        if self.is_dir && self.children.len() == 0 {
+            return Ok(out);
+        }
+
+        out += &format!("pub mod {}", self.name);
+
+        if self.children.len() > 0 {
+            out += "{{ \n";
+
+            for child in self.children.clone() {
+                out += &child.generate_mods()?;
+            }
+
+            out += "}} \n";
+        } else {
+            out += "; \n";
+        }
+
+        Ok(out)
     }
 
     pub fn generate_services(&self) -> String {
@@ -172,26 +204,5 @@ impl PageEntry {
         }
 
         return false;
-    }
-}
-
-impl fmt::Display for PageEntry {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        if self.is_dir && self.children.len() == 0 {
-            return Ok(());
-        }
-
-        write!(f, "pub mod {}", self.name)?;
-        if self.children.len() > 0 {
-            write!(f, " {{ \n")?;
-            for child in self.children.clone() {
-                child.fmt(f)?;
-            }
-            write!(f, "}} \n")?;
-        } else {
-            write!(f, "; \n")?;
-        }
-
-        Ok(())
     }
 }
