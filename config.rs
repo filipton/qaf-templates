@@ -6,6 +6,7 @@ use std::path::PathBuf;
 pub struct BuildrsConfig {
     pub filenames_as_scopes: bool,
     pub disable_scopes: bool,
+    pub tmux_single_window: bool,
 }
 
 impl Default for BuildrsConfig {
@@ -13,6 +14,7 @@ impl Default for BuildrsConfig {
         Self {
             filenames_as_scopes: false,
             disable_scopes: false,
+            tmux_single_window: true,
         }
     }
 }
@@ -23,12 +25,8 @@ impl BuildrsConfig {
     }
 
     pub fn from_file(path: PathBuf) -> Result<Self> {
-        let file = std::fs::read_to_string(path);
-
-        if file.is_err() {
-            return Ok(Self::new());
-        }
-        let config = serde_json::from_str(&file?)?;
+        let file = std::fs::read_to_string(path)?;
+        let config = serde_json::from_str(&file)?;
 
         Ok(config)
     }
