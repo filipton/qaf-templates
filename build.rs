@@ -2,12 +2,10 @@ const PAGES_DIR: &'static str = "src/pages";
 const SCOPE_PATH: &'static str = "src/actix_scope.rs";
 
 use anyhow::Result;
-use config::BuildrsConfig;
 use rust_format::{Formatter, RustFmt};
+use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 use syn::ItemFn;
-
-mod config;
 
 #[derive(Debug, Clone)]
 struct PageEntry {
@@ -203,5 +201,20 @@ impl PageEntry {
         }
 
         return false;
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct BuildrsConfig {
+    pub disable_scopes: bool,
+    pub tmux_single_window: bool,
+}
+
+impl BuildrsConfig {
+    pub fn from_file(path: PathBuf) -> Result<Self> {
+        let file = std::fs::read_to_string(path)?;
+        let config = serde_json::from_str(&file)?;
+
+        Ok(config)
     }
 }
