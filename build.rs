@@ -207,7 +207,6 @@ impl PageEntry {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct BuildrsConfig {
     pub disable_scopes: bool,
-    pub tmux_single_window: bool,
 }
 
 impl BuildrsConfig {
