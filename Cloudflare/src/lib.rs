@@ -3,5 +3,5 @@ mod router;
 
 #[event(fetch)]
 async fn main(req: Request, env: Env, ctx: Context) -> Result<Response> {
-    return router::router(req, env, ctx).await;
+    return router::router(req, env).await;
 }
