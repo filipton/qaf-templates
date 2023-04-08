@@ -147,7 +147,11 @@ impl PageEntry {
 
             for route in PageEntry::get_cloudflare_routes(child_path).unwrap_or(vec![]) {
                 tmp += &match route.route {
-                    Some(route) => format!("if route == Some(&\"{}\") {{ \n", route),
+                    Some(route) => format!(
+                        "if route == Some(&\"{}\") && path.len() == {} {{ \n",
+                        route,
+                        depth + 1
+                    ),
                     None => format!("if route == None {{ \n"),
                 };
 

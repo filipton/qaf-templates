@@ -15,13 +15,16 @@ pub async fn router(req: Request, env: Env, ctx: Context) -> Result<Response> {
     let path = path.split("/").collect::<Vec<&str>>();
 
     let route = path.get(1);
-    if route == Some(&"route1") {
+    if route == Some(&"route1") && path.len() == 2 {
         return pages::test::route1(req, env, ctx).await;
     }
     if route == Some(&"nested") {
         let route = path.get(2);
         if route == None {
             return pages::nested::dsa::hw_empty(req, env, ctx).await;
+        }
+        if route == Some(&"siem") && path.len() == 3 {
+            return pages::nested::dsa::siema(req, env, ctx).await;
         }
     }
 

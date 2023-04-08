@@ -5,3 +5,9 @@ use worker::{Context, Env, Request, Response, Result};
 pub async fn hw_empty(req: Request, env: Env, ctx: Context) -> Result<Response> {
     Response::ok("Hello, Void!!")
 }
+
+
+#[route("siem")]
+pub async fn siema(req: Request, env: Env, ctx: Context) -> Result<Response> {
+    Response::ok("Hello, Siema!!")
+}
