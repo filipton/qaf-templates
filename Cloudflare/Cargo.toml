@@ -13,7 +13,7 @@ crate-type = ["cdylib"]
 
 [dependencies]
 worker = "0.0.15"
-fnstack-cf-macro = { path = "../../fnstack-cf-macro" }
+fnstack-cf-macro = "0.1.0"
 
 [build-dependencies]
 syn = { version = "2.0.13", features = ["full"] }

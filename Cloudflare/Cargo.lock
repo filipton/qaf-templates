@@ -80,6 +80,8 @@ dependencies = [
 [[package]]
 name = "fnstack-cf-macro"
 version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "395f0cbbcd96b2c657138766a594a8d43e48c04da53ff1bcbf417c88822d9cb3"
 
 [[package]]
 name = "fnv"

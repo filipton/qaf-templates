@@ -9,5 +9,5 @@ pub async fn hw_empty(req: Request, env: Env, ctx: Context) -> Result<Response> 
 
 #[route("siem")]
 pub async fn siema(req: Request, env: Env, ctx: Context) -> Result<Response> {
-    Response::ok("Hello, Siema!!")
+    Response::ok("Siema")
 }
