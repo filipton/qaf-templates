@@ -78,6 +78,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "fnstack-build-utils"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3696aeb3408a03d8e922e52ff3284f458bb92eed995daad5fcb9a35131fa2b5d"
+dependencies = [
+ "anyhow",
+ "syn 2.0.13",
+]
+
+[[package]]
 name = "fnstack-cf-macro"
 version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -386,11 +396,11 @@ name = "rust_project_name_t"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "fnstack-build-utils",
  "fnstack-cf-macro",
  "rust-format",
  "serde",
  "serde_json",
- "syn 2.0.13",
  "worker",
 ]
 
