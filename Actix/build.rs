@@ -100,7 +100,10 @@ impl PageEntry {
             return Ok(out);
         }
 
-        out += &format!("pub mod {}", self.name);
+        if self.name.contains("{") || self.name.contains("}") {
+            out += &format!("#[path = \"{}\"]\n", self.name);
+        }
+        out += &format!("pub mod {}", self.name.replace("{", "_").replace("}", "_"));
         if self.children.len() > 0 {
             out += "{ \n";
 
@@ -127,7 +130,11 @@ impl PageEntry {
 
             let child_path = PathBuf::from(PAGES_DIR).join(format!("{}.rs", child.name));
             for endpoint in PageEntry::get_actix_endpoints(child_path).unwrap_or(vec![]) {
-                tmp += &format!(".service(pages::{}::{})", child.name, endpoint);
+                tmp += &format!(
+                    ".service(pages::{}::{})",
+                    child.name.replace("{", "_").replace("}", "_"),
+                    endpoint
+                );
             }
         }
 
@@ -153,7 +160,9 @@ impl PageEntry {
                 .to_str()
                 .unwrap()
                 .replacen("src/", "", 1)
-                .replace("/", "::");
+                .replace("/", "::")
+                .replace("{", "_")
+                .replace("}", "_");
 
             for endpoint in PageEntry::get_actix_endpoints(tmp_path).unwrap_or(vec![]) {
                 tmp += &format!(".service({}::{}::{})\n", use_path, child.name, endpoint);

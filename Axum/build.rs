@@ -151,7 +151,7 @@ impl PageEntry {
         if self.name.contains(":") {
             out += &format!("#[path = \"{}\"]\n", self.name);
         }
-        out += &format!("pub mod {}", self.name.replace(":", "param_"));
+        out += &format!("pub mod {}", self.name.replace(":", "_"));
         if self.children.len() > 0 {
             out += "{ \n";
 
@@ -182,7 +182,7 @@ impl PageEntry {
                 .to_str()
                 .unwrap()
                 .replacen("src/", "", 1)
-                .replace(":", "param_")
+                .replace(":", "_")
                 .replace("/", "::");
             let use_path = format!("{}::{}", use_path, child.name);
 

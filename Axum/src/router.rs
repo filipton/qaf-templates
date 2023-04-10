@@ -8,7 +8,7 @@ use axum::{
 pub mod pages {
     pub mod test;
     #[path = ":id"]
-    pub mod param_id {
+    pub mod _id {
         pub mod dsa;
     }
 }
@@ -16,9 +16,9 @@ pub mod pages {
 pub async fn router() -> Router {
     let router = Router::new()
         .route("/", get(pages::test::test))
-        .route("/:id", get(pages::param_id::dsa::test))
-        .route("/:id", post(pages::param_id::dsa::test2))
-        .route("/:id/siem", post(pages::param_id::dsa::test3));
+        .route("/:id", get(pages::_id::dsa::test))
+        .route("/:id", post(pages::_id::dsa::test2))
+        .route("/:id/siem", post(pages::_id::dsa::test3));
 
     return router;
 }
