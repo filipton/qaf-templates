@@ -1,12 +1,12 @@
-use fnstack_cf_macro::route;
+use fnstack_cf_macro::any;
 use worker::{Request, Response, Result, RouteContext};
 
-#[route]
+#[any]
 pub async fn hw_empty(req: Request, ctx: RouteContext<()>) -> Result<Response> {
     Response::ok("Hello, Void!!")
 }
 
-#[route("siem")]
+#[any("siem")]
 pub async fn siema(req: Request, ctx: RouteContext<()>) -> Result<Response> {
     Response::ok("Siema")
 }

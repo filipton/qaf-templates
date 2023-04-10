@@ -1,7 +1,7 @@
-use fnstack_cf_macro::route;
+use fnstack_cf_macro::any;
 use worker::{Request, Response, Result, RouteContext};
 
-#[route("route1")]
+#[any("route1")]
 pub async fn route1(req: Request, ctx: RouteContext<()>) -> Result<Response> {
     Response::ok("Hello, World!")
 }

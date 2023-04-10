@@ -1,0 +1,31 @@
+[package]
+name = "rust_project_name_t"
+version = "0.1.0"
+edition = "2021"
+build = "build.rs"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+fnstack-cf-macro = { version = "0.2.1", features = ["axum"] }
+axum = "0.6.12"
+futures = "0.3.28"
+tokio-util = { version = "0.7.7", features = ["io"] }
+tracing = "0.1.37"
+tower-http = { version = "0.4.0", features = ["limit", "trace"] }
+tracing-subscriber = { version = "0.3.16", features = ["env-filter"] }
+tokio = { version = "1.27.0", features = ["full"] }
+anyhow = "1.0.70"
+
+[build-dependencies]
+syn = { version = "2.0.13", features = ["full"] }
+serde = { version = "1.0.159", features = ["derive"] }
+anyhow = "1.0.70"
+serde_json = "1.0.95"
+rust-format = "0.3.4"
+
+[profile.release]
+strip = true
+opt-level = "s"
+lto = true
+codegen-units = 1
