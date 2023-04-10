@@ -7,7 +7,7 @@ build = "build.rs"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-fnstack-cf-macro = { version = "0.2.1", features = ["axum"] }
+fnstack-cf-macro = { version = "0.2.2", features = ["axum"] }
 axum = "0.6.12"
 futures = "0.3.28"
 tokio-util = { version = "0.7.7", features = ["io"] }
