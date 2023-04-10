@@ -93,10 +93,20 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 
 [[package]]
-name = "fnstack-cf-macro"
-version = "0.2.1"
+name = "fnstack-build-utils"
+version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "48c417dee38f1e973e6f716d42886d142863f8b89d30d852263aa988a8aec2d2"
+checksum = "3696aeb3408a03d8e922e52ff3284f458bb92eed995daad5fcb9a35131fa2b5d"
+dependencies = [
+ "anyhow",
+ "syn 2.0.13",
+]
+
+[[package]]
+name = "fnstack-cf-macro"
+version = "0.2.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bdf7022c072c5b59515ca5c3e03af9b9d802370602ad8ddbf7626d6dbe291e64"
 
 [[package]]
 name = "fnv"
@@ -506,12 +516,12 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "axum",
+ "fnstack-build-utils",
  "fnstack-cf-macro",
  "futures",
  "rust-format",
  "serde",
  "serde_json",
- "syn 2.0.13",
  "tokio",
  "tokio-util",
  "tower-http",
