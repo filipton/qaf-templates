@@ -1,14 +1,17 @@
-use axum::response::Html;
+use axum::{extract::State, response::Html};
 use qaf_macros::get;
+use rust_project_name_t::AppState;
 
 #[get]
-pub async fn test() -> Html<&'static str> {
-    Html(
+pub async fn test(State(data): State<AppState>) -> Html<String> {
+    let title = &data.test;
+
+    Html(format!(
         r#"
         <!doctype html>
         <html>
             <head>
-                <title>Upload something!</title>
+                <title>{}</title>
             </head>
             <body>
                 <form action="/" method="post" enctype="multipart/form-data">
@@ -26,5 +29,6 @@ pub async fn test() -> Html<&'static str> {
             </body>
         </html>
         "#,
-    )
+        title
+    ))
 }

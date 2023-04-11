@@ -3,6 +3,7 @@ use axum::{
     routing::{any, delete, get, head, options, patch, post, put, trace},
     Router,
 };
+use rust_project_name_t::AppState;
 
 #[path = "pages"]
 pub mod pages {
@@ -13,12 +14,13 @@ pub mod pages {
     }
 }
 
-pub async fn router() -> Router {
+pub async fn router(state: AppState) -> Router {
     let router = Router::new()
         .route("/", get(pages::test::test))
         .route("/:id", get(pages::_id::dsa::test))
         .route("/:id", post(pages::_id::dsa::test2))
-        .route("/:id/siem", post(pages::_id::dsa::test3));
+        .route("/:id/siem", post(pages::_id::dsa::test3))
+        .with_state(state);
 
     return router;
 }
