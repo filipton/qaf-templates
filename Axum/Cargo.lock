@@ -93,22 +93,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 
 [[package]]
-name = "fnstack-build-utils"
-version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3696aeb3408a03d8e922e52ff3284f458bb92eed995daad5fcb9a35131fa2b5d"
-dependencies = [
- "anyhow",
- "syn 2.0.13",
-]
-
-[[package]]
-name = "fnstack-cf-macro"
-version = "0.2.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bdf7022c072c5b59515ca5c3e03af9b9d802370602ad8ddbf7626d6dbe291e64"
-
-[[package]]
 name = "fnv"
 version = "1.0.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -463,6 +447,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "qaf-build-utils"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "da8a8099e3a737ee82ebcf203c1c55ad28fe28230f2c103c0a899bcd13d73df3"
+dependencies = [
+ "anyhow",
+ "syn 2.0.13",
+]
+
+[[package]]
+name = "qaf-macros"
+version = "0.2.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1fb8a8103f3521f926d8311c00a798413565bedc744ceac95352cf98096ebe34"
+
+[[package]]
 name = "quote"
 version = "1.0.26"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -516,9 +516,9 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "axum",
- "fnstack-build-utils",
- "fnstack-cf-macro",
  "futures",
+ "qaf-build-utils",
+ "qaf-macros",
  "rust-format",
  "serde",
  "serde_json",

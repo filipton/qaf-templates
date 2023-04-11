@@ -1,4 +1,4 @@
-use fnstack_cf_macro::on;
+use qaf_macros::on;
 use worker::{Request, Response, Result, RouteContext};
 
 #[on("route1")]

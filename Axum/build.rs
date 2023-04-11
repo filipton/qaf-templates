@@ -2,7 +2,7 @@ const PAGES_DIR: &'static str = "src/pages";
 const ROUTER_PATH: &'static str = "src/router.rs";
 
 use anyhow::Result;
-use fnstack_build_utils::PageEntry;
+use qaf_build_utils::PageEntry;
 use rust_format::{Formatter, RustFmt};
 use std::path::PathBuf;
 
@@ -42,7 +42,7 @@ fn main() -> Result<()> {
     std::fs::write(ROUTER_PATH, main_template_content)?;
 
     println!("cargo:rerun-if-changed=build.rs");
-    println!("cargo:rerun-if-changed=fnstack.json");
+    println!("cargo:rerun-if-changed=qaf.json");
     println!("cargo:rerun-if-changed=src/pages");
 
     Ok(())
@@ -73,7 +73,7 @@ pub fn generate_routes(entry: &PageEntry, path: &PathBuf) -> String {
             .replacen("src/pages", "", 1)
             .to_owned();
 
-        for route in fnstack_build_utils::get_file_routes(child_path).unwrap_or(vec![]) {
+        for route in qaf_build_utils::get_file_routes(child_path).unwrap_or(vec![]) {
             let route_path = route_path.clone() + "/" + &route.route.unwrap_or(String::from(""));
             let mut route_path = route_path.trim_end_matches("/");
             if route_path == "" {

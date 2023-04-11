@@ -2,18 +2,16 @@ const PAGES_DIR: &'static str = "src/pages";
 const SCOPE_PATH: &'static str = "src/actix_scope.rs";
 
 use anyhow::Result;
-use fnstack_build_utils::PageEntry;
+use qaf_build_utils::PageEntry;
 use rust_format::{Formatter, RustFmt};
-use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 
 fn main() -> Result<()> {
-    let config: BuildrsConfig = BuildrsConfig::from_file(PathBuf::from("fnstack.json"))?;
     let pages = PathBuf::from(PAGES_DIR);
 
     let entries: PageEntry = PageEntry::generate(&pages)?;
     let mods_str = entries.get_mods_string()?;
-    let services_str = generate_services(&entries, &config);
+    let services_str = generate_services(&entries);
 
     let services = format!(
         r#"
@@ -41,25 +39,25 @@ fn main() -> Result<()> {
     std::fs::write(SCOPE_PATH, main_template_content)?;
 
     println!("cargo:rerun-if-changed=build.rs");
-    println!("cargo:rerun-if-changed=fnstack.json");
+    println!("cargo:rerun-if-changed=qaf.json");
     println!("cargo:rerun-if-changed=src/pages");
 
     Ok(())
 }
 
 // TODO: Refactor this
-pub fn generate_services(entry: &PageEntry, config: &BuildrsConfig) -> String {
+pub fn generate_services(entry: &PageEntry) -> String {
     let mut tmp = String::from("web::scope(\"\")");
 
     for child in &entry.children {
         if child.children.len() > 0 {
-            tmp += &_generate_services(&child, PathBuf::from("src/pages"), config);
+            tmp += &_generate_services(&child, PathBuf::from("src/pages"));
             continue;
         }
 
         let child_path = PathBuf::from(PAGES_DIR).join(format!("{}.rs", child.name));
 
-        for route in fnstack_build_utils::get_file_routes(child_path).unwrap_or(vec![]) {
+        for route in qaf_build_utils::get_file_routes(child_path).unwrap_or(vec![]) {
             tmp += &format!(
                 ".service(pages::{}::{})\n",
                 child.name.replace("{", "_").replace("}", "_"),
@@ -71,17 +69,15 @@ pub fn generate_services(entry: &PageEntry, config: &BuildrsConfig) -> String {
     return tmp;
 }
 
-fn _generate_services(entry: &PageEntry, path: PathBuf, config: &BuildrsConfig) -> String {
+fn _generate_services(entry: &PageEntry, path: PathBuf) -> String {
     let mut tmp = String::new();
     let path = path.join(&entry.name);
 
-    if !config.disable_scopes {
-        tmp += &format!(".service(web::scope(\"{}\")\n", entry.name);
-    }
+    tmp += &format!(".service(web::scope(\"{}\")\n", entry.name);
 
     for child in &entry.children {
         if child.children.len() > 0 {
-            tmp += &_generate_services(&child, path.clone(), config);
+            tmp += &_generate_services(&child, path.clone());
             continue;
         }
 
@@ -94,7 +90,7 @@ fn _generate_services(entry: &PageEntry, path: PathBuf, config: &BuildrsConfig) 
             .replace("{", "_")
             .replace("}", "_");
 
-        for route in fnstack_build_utils::get_file_routes(tmp_path).unwrap_or(vec![]) {
+        for route in qaf_build_utils::get_file_routes(tmp_path).unwrap_or(vec![]) {
             tmp += &format!(
                 ".service({}::{}::{})\n",
                 use_path,
@@ -104,22 +100,6 @@ fn _generate_services(entry: &PageEntry, path: PathBuf, config: &BuildrsConfig) 
         }
     }
 
-    if !config.disable_scopes {
-        tmp += ")";
-    }
+    tmp += ")";
     return tmp;
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct BuildrsConfig {
-    pub disable_scopes: bool,
-}
-
-impl BuildrsConfig {
-    pub fn from_file(path: PathBuf) -> Result<Self> {
-        let file = std::fs::read_to_string(path)?;
-        let config = serde_json::from_str(&file)?;
-
-        Ok(config)
-    }
 }

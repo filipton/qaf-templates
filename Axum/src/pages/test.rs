@@ -1,5 +1,5 @@
 use axum::response::Html;
-use fnstack_cf_macro::get;
+use qaf_macros::get;
 
 #[get]
 pub async fn test() -> Html<&'static str> {

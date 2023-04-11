@@ -508,16 +508,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "fnstack-build-utils"
-version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3696aeb3408a03d8e922e52ff3284f458bb92eed995daad5fcb9a35131fa2b5d"
-dependencies = [
- "anyhow",
- "syn 2.0.13",
-]
-
-[[package]]
 name = "fnv"
 version = "1.0.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1008,6 +998,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "qaf-build-utils"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "da8a8099e3a737ee82ebcf203c1c55ad28fe28230f2c103c0a899bcd13d73df3"
+dependencies = [
+ "anyhow",
+ "syn 2.0.13",
+]
+
+[[package]]
 name = "quote"
 version = "1.0.26"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1111,9 +1111,9 @@ dependencies = [
  "actix-web",
  "anyhow",
  "dotenvy",
- "fnstack-build-utils",
  "futures-channel",
  "futures-util",
+ "qaf-build-utils",
  "rand",
  "rust-format",
  "serde",

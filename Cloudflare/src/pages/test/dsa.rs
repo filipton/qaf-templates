@@ -1,4 +1,4 @@
-use fnstack_cf_macro::{get, post};
+use qaf_macros::{get, post};
 use worker::{Request, Response, Result, RouteContext};
 
 #[get(":id")]
