@@ -4,7 +4,7 @@ use rust_project_name_t::AppState;
 
 #[get]
 pub async fn test(State(data): State<AppState>) -> Html<String> {
-    let title = &data.test;
+    let title = "dsa";
 
     Html(format!(
         r#"

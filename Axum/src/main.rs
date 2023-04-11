@@ -6,20 +6,17 @@ use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 mod router;
 
+/*[[IF WEBSOCKET Tungstenite]]
+mod websockets;
+use std::{collections::HashMap, sync::Mutex};
+use tokio::net::TcpListener;
+use websockets::PeerMap;
+[[ENDIF]]*/
+
 #[tokio::main]
 async fn main() -> Result<()> {
     dotenvy::dotenv().ok();
     let options = StartupOptions::new();
-
-    let state = AppState {
-        /*[[IF DATABASE Postgres(SQLX)]]
-        pool: sqlx::postgres::PgPoolOptions::new()
-            .max_connections(options.max_connections)
-            .connect(&options.connection_string)
-            .await?,
-        [[ENDIF]]*/
-        test: "test".to_string(),
-    };
 
     tracing_subscriber::registry()
         .with(
@@ -29,7 +26,35 @@ async fn main() -> Result<()> {
         .with(tracing_subscriber::fmt::layer())
         .init();
 
+    let state = AppState {
+        /*[[IF DATABASE Postgres(SQLX)]]
+        pool: sqlx::postgres::PgPoolOptions::new()
+            .max_connections(options.max_connections)
+            .connect(&options.connection_string)
+            .await?,
+        [[ENDIF]]*/
+    };
+
+    /*[[IF WEBSOCKET Tungstenite]]
+    let ws_state = PeerMap::new(Mutex::new(HashMap::new()));
+
+    tokio::spawn(async move {
+        let try_socket = TcpListener::bind(&options.websocket_bind_address).await;
+        let listener = try_socket.expect("Failed to bind");
+        tracing::debug!("websockets listening on {}", options.websocket_bind_address);
+
+        while let Ok((stream, addr)) = listener.accept().await {
+            tokio::spawn(websockets::handle_connection(
+                ws_state.clone(),
+                stream,
+                addr,
+            ));
+        }
+    });
+    [[ENDIF]]*/
+
     let app = Router::new()
+        .with_state(state.clone())
         .merge(router::router(state).await)
         .layer(tower_http::trace::TraceLayer::new_for_http());
 

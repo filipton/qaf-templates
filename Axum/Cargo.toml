@@ -7,16 +7,28 @@ build = "build.rs"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-qaf-macros = { version = "0.2.2", features = ["axum"] }
 axum = "0.6.12"
-futures = "0.3.28"
-tokio-util = { version = "0.7.7", features = ["io"] }
-tracing = "0.1.37"
-tower-http = { version = "0.4.0", features = ["limit", "trace"] }
-tracing-subscriber = { version = "0.3.16", features = ["env-filter"] }
 tokio = { version = "1.27.0", features = ["full"] }
 anyhow = "1.0.70"
 dotenvy = "0.15.7"
+futures = "0.3.28"
+tracing = "0.1.37"
+tokio-util = { version = "0.7.7", features = ["io"] }
+qaf-macros = { version = "0.2.2", features = ["axum"] }
+tower-http = { version = "0.4.0", features = ["limit", "trace"] }
+tracing-subscriber = { version = "0.3.16", features = ["env-filter"] }
+#[[IF DATABASE Postgres(SQLX)]]
+sqlx = { version = "0.6.2", features = [
+    "postgres",
+    "macros",
+    "runtime-tokio-rustls",
+] }
+#[[ENDIF]]
+#[[IF WEBSOCKET Tungstenite]]
+futures-util = "0.3.27"
+futures-channel = "0.3.27"
+tokio-tungstenite = "0.18.0"
+#[[ENDIF]]
 
 [build-dependencies]
 qaf-build-utils = "0.1.0"

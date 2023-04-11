@@ -3,7 +3,6 @@ pub struct AppState {
     /*[[IF DATABASE Postgres(SQLX)]]
     pub pool: sqlx::postgres::PgPool,
     [[ENDIF]]*/
-    pub test: String,
 }
 
 pub struct StartupOptions {

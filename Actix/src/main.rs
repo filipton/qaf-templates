@@ -1,11 +1,8 @@
 use actix_web::{web::Data, App, HttpServer};
 
-//[[IF WEBSERVER Actix]]
 mod actix_scope;
 use actix_scope::generated_scope;
 use rust_project_name_t::{AppState, StartupOptions};
-
-//[[ENDIF]]
 
 /*[[IF WEBSOCKET Tungstenite]]
 mod websockets;
@@ -19,19 +16,15 @@ async fn main() -> std::io::Result<()> {
     dotenvy::dotenv().ok();
     let options = StartupOptions::new();
 
-    /*[[IF DATABASE Postgres(SQLX)]]
-    let pool = sqlx::postgres::PgPoolOptions::new()
-        .max_connections(options.max_connections)
-        .connect(&options.connection_string)
-        .await
-        .unwrap();
-
-    let state = AppState { pool };
-    [[ENDIF]]*/
-
-    //[[IF DATABASE Off]]
-    let state = AppState {};
-    //[[ENDIF]]
+    let state = AppState {
+        /*[[IF DATABASE Postgres(SQLX)]]
+        pool: sqlx::postgres::PgPoolOptions::new()
+            .max_connections(options.max_connections)
+            .connect(&options.connection_string)
+            .await
+            .unwrap(),
+        [[ENDIF]]*/
+    };
 
     /*[[IF WEBSOCKET Tungstenite]]
     let ws_state = PeerMap::new(Mutex::new(HashMap::new()));
