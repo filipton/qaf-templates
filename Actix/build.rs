@@ -11,12 +11,13 @@ fn main() -> Result<()> {
 
     let entries: PageEntry = PageEntry::generate(&pages)?;
     let mods_str = entries.get_mods_string()?;
-    let services_str = generate_services(&entries);
+    let services_str = generate_services(&entries, &pages);
 
     let services = format!(
         r#"
         pub fn generated_scope() -> actix_web::Scope {{
-            {}
+                web::scope("")
+                {}
         }}
         "#,
         services_str
@@ -45,43 +46,19 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-// TODO: Refactor this
-pub fn generate_services(entry: &PageEntry) -> String {
-    let mut tmp = String::from("web::scope(\"\")");
-
-    for child in &entry.children {
-        if child.children.len() > 0 {
-            tmp += &_generate_services(&child, PathBuf::from("src/pages"));
-            continue;
-        }
-
-        let child_path = PathBuf::from(PAGES_DIR).join(format!("{}.rs", child.name));
-
-        for route in qaf_build_utils::get_file_routes(child_path).unwrap_or(vec![]) {
-            tmp += &format!(
-                ".service(pages::{}::{})\n",
-                child.name.replace("{", "_").replace("}", "_"),
-                route.function
-            );
-        }
-    }
-
-    return tmp;
-}
-
-fn _generate_services(entry: &PageEntry, path: PathBuf) -> String {
+pub fn generate_services(entry: &PageEntry, path: &PathBuf) -> String {
     let mut tmp = String::new();
-    let path = path.join(&entry.name);
-
-    tmp += &format!(".service(web::scope(\"{}\")\n", entry.name);
 
     for child in &entry.children {
+        let child_path = path.join(&child.name);
         if child.children.len() > 0 {
-            tmp += &_generate_services(&child, path.clone());
+            tmp += &format!(".service(web::scope(\"{}\")\n", child.name);
+            tmp += &generate_services(&child, &child_path);
+            tmp += ")";
             continue;
         }
 
-        let tmp_path = path.clone().join(format!("{}.rs", child.name));
+        let child_path = child_path.with_extension("rs");
         let use_path = path
             .to_str()
             .unwrap()
@@ -90,7 +67,7 @@ fn _generate_services(entry: &PageEntry, path: PathBuf) -> String {
             .replace("{", "_")
             .replace("}", "_");
 
-        for route in qaf_build_utils::get_file_routes(tmp_path).unwrap_or(vec![]) {
+        for route in qaf_build_utils::get_file_routes(child_path).unwrap_or(vec![]) {
             tmp += &format!(
                 ".service({}::{}::{})\n",
                 use_path,
@@ -100,6 +77,5 @@ fn _generate_services(entry: &PageEntry, path: PathBuf) -> String {
         }
     }
 
-    tmp += ")";
     return tmp;
 }
