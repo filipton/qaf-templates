@@ -76,7 +76,10 @@ pub fn generate_routes(entry: &PageEntry, path: &PathBuf) -> String {
 
         for route in qaf_build_utils::get_file_routes(child_path).unwrap_or(vec![]) {
             let route_path = route_path.clone() + "/" + &route.route.unwrap_or(String::from(""));
-            let route_path = route_path.trim_end_matches("/");
+            let mut route_path = route_path.trim_end_matches("/");
+            if route_path.is_empty() {
+                route_path = "/";
+            }
 
             tmp += &format!(
                 ".{}_async(\"{}\", {}::{})",
