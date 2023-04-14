@@ -1,0 +1,12 @@
+{
+  "repository": "https://github.com/vercel/examples.git",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "vercel": "^28.18.5"
+  },
+    "scripts": {
+        "dv": "wasm-pack build --target web ; sed -i \"/if (typeof input === 'undefined') {/,+2d\" pkg/wasm.js ; vercel dev",
+        "deploy": "wasm-pack build --target web ; sed -i \"/if (typeof input === 'undefined') {/,+2d\" pkg/wasm.js ; vercel deploy"
+  }
+}
