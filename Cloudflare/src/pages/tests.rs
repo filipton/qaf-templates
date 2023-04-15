@@ -13,7 +13,7 @@ pub async fn index(_req: Request, _ctx: RouteContext<()>) -> Result<Response> {
 
 #[get("fetch")]
 pub async fn fetch(_req: Request, _ctx: RouteContext<()>) -> Result<Response> {
-    let body = reqwest_wasm::get("https://gist.githubusercontent.com/filipton/f2c350b40b56896abbc5b010e231dc52/raw/c0284276e19ee1ed5074804e12a01244611279c6/blockurls.txt")
+    let body = reqwest::get("https://gist.githubusercontent.com/filipton/f2c350b40b56896abbc5b010e231dc52/raw/c0284276e19ee1ed5074804e12a01244611279c6/blockurls.txt")
         .await
         .unwrap()
         .text()

@@ -14,7 +14,7 @@ crate-type = ["cdylib"]
 [dependencies]
 worker = "0.0.15"
 qaf-macros = { version = "0.2.2", features = ["cloudflare"] }
-reqwest-wasm = "0.11.16"
+reqwest = "0.11.16"
 #[[IF WEBSOCKET On]]
 wasm-bindgen-futures = "0.4.34"
 futures = "0.3.28"
