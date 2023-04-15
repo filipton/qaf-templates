@@ -7,6 +7,9 @@ export const config = {
 }
 
 export default async function handler(request: Request) {
+    // @ts-ignore
+    const { LIBSQL_CLIENT_URL, LIBSQL_CLIENT_TOKEN } = process.env;
+
     let body: number[] = [];
     if (request.body) {
         const reader = request.body.getReader();
@@ -44,6 +47,9 @@ export default async function handler(request: Request) {
         url: url,
         method: request.method,
         headers: headers,
+
+        // @ts-ignore
+        env: process.env as any,
         body: body
     } as WasmRequest);
 
@@ -59,6 +65,9 @@ export type WasmRequest = {
     url: string;
     method: string;
     headers: [string, string][];
+
+    // @ts-ignore
+    env: Map<string, string>;
     body: number[];
 };
 
