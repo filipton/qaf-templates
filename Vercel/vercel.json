@@ -1,7 +1,9 @@
 {
-  "rewrites": [
-    { "source": "/", "destination": "/api" },
-    { "source": "/:rew*", "destination": "/api" },
-    { "source": "/:rew*/", "destination": "/api" }
-  ]
+    "buildCommand": "wasm-pack build --target web ; sed -i \"/if (typeof input === 'undefined') {/,+2d\" pkg/wasm.js",
+    "outputDirectory": "./pkg",
+    "rewrites": [
+        { "source": "/", "destination": "/api" },
+        { "source": "/:rew*", "destination": "/api" },
+        { "source": "/:rew*/", "destination": "/api" }
+    ]
 }
