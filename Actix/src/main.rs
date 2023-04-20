@@ -24,6 +24,14 @@ async fn main() -> std::io::Result<()> {
             .await
             .unwrap(),
         [[ENDIF]]*/
+
+        /*[[IF DATABASE Mysql(SQLX)]]
+        pool: sqlx::postgres::MySqlPoolOptions::new()
+            .max_connections(options.max_connections)
+            .connect(&options.connection_string)
+            .await
+            .unwrap(),
+        [[ENDIF]]*/
     };
 
     /*[[IF WEBSOCKET Tungstenite]]

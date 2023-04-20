@@ -12,8 +12,15 @@ dotenvy = "0.15.6"
 rand = "0.8.5"
 tokio = { version = "1.26.0", features = ["full"] }
 #[[IF DATABASE Postgres(SQLX)]]
-sqlx = { version = "0.6.2", features = [
+sqlx = { version = "0.6.3", features = [
     "postgres",
+    "macros",
+    "runtime-tokio-rustls",
+] }
+#[[ENDIF]]
+#[[IF DATABASE Mysql(SQLX)]]
+sqlx = { version = "0.6.3", features = [
+    "mysql",
     "macros",
     "runtime-tokio-rustls",
 ] }

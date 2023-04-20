@@ -33,6 +33,13 @@ async fn main() -> Result<()> {
             .connect(&options.connection_string)
             .await?,
         [[ENDIF]]*/
+
+        /*[[IF DATABASE Mysql(SQLX)]]
+        pool: sqlx::postgres::MySqlPoolOptions::new()
+            .max_connections(options.max_connections)
+            .connect(&options.connection_string)
+            .await?,
+        [[ENDIF]]*/
     };
 
     /*[[IF WEBSOCKET Tungstenite]]
