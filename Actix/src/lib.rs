@@ -5,7 +5,7 @@ pub struct AppState {
     [[ENDIF]]*/
 
     /*[[IF DATABASE Mysql(SQLX)]]
-    pub pool: sqlx::postgres::MySqlPool,
+    pub pool: sqlx::mysql::MySqlPool,
     [[ENDIF]]*/
 }
 

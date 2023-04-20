@@ -35,7 +35,7 @@ async fn main() -> Result<()> {
         [[ENDIF]]*/
 
         /*[[IF DATABASE Mysql(SQLX)]]
-        pool: sqlx::postgres::MySqlPoolOptions::new()
+        pool: sqlx::mysql::MySqlPoolOptions::new()
             .max_connections(options.max_connections)
             .connect(&options.connection_string)
             .await?,
