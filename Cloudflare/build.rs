@@ -15,7 +15,7 @@ fn main() -> Result<()> {
 
     let routes = format!(
         r#"
-        pub async fn router(req: Request, env: Env) -> Result<Response> {{
+        pub async fn route(req: Request, env: Env) -> Result<Response> {{
             let router = Router::new();
 
             return router

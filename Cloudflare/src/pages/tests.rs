@@ -3,7 +3,8 @@ use futures::StreamExt;
 //[[ENDIF]]
 use qaf_macros::{get, on};
 use worker::{
-    EventStream, Request, Response, Result, RouteContext, WebSocket, WebSocketPair, WebsocketEvent,
+    console_log, EventStream, Request, Response, Result, RouteContext, WebSocket, WebSocketPair,
+    WebsocketEvent,
 };
 
 #[get]
@@ -21,6 +22,19 @@ pub async fn fetch(_req: Request, _ctx: RouteContext<()>) -> Result<Response> {
         .unwrap();
 
     Response::ok(format!("body: {}", body))
+}
+
+//[[IF DATABASE Planetscale]]
+// You must set PS_HOST, PS_USER, PS_PASS secrets in your .dev.vars file!
+#[get("db")]
+pub async fn db(_req: Request, ctx: RouteContext<()>) -> Result<Response> {
+    let mut conn = crate::get_db_conn(&ctx)?;
+    let res: String = planetscale_driver::query("SELECT 'Test 123'")
+        .fetch_scalar(&mut conn)
+        .await
+        .unwrap();
+
+    Response::ok(format!("Test string: {}", res))
 }
 
 //[[IF WEBSOCKET On]]

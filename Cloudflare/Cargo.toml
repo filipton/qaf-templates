@@ -12,12 +12,15 @@ wasm-opt = false
 crate-type = ["cdylib"]
 
 [dependencies]
-worker = "0.0.15"
+worker = "0.0.16"
 qaf-macros = { version = "0.2.2", features = ["cloudflare"] }
 reqwest = "0.11.16"
 #[[IF WEBSOCKET On]]
 wasm-bindgen-futures = "0.4.34"
 futures = "0.3.28"
+#[[ENDIF]]
+#[[IF DATABASE Planetscale]]
+planetscale-driver = "*"
 #[[ENDIF]]
 
 [build-dependencies]
