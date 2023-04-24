@@ -36,6 +36,7 @@ pub async fn db(_req: Request, ctx: RouteContext<()>) -> Result<Response> {
 
     Response::ok(format!("Test string: {}", res))
 }
+//[[ENDIF]]
 
 //[[IF WEBSOCKET On]]
 #[on("ws")]
