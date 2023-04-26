@@ -7,8 +7,10 @@ export const config = {
 }
 
 export default async function handler(request: Request) {
-    // @ts-ignore
-    const { LIBSQL_CLIENT_URL, LIBSQL_CLIENT_TOKEN } = process.env;
+    //[[IF DATABASE Planetscale]]
+    // @ts-ignore - Idk why but this is needed if you want to use the env vars
+    const { PS_HOST, PS_USER, PS_PASS } = process.env;
+    //[[ENDIF]]
 
     let body: number[] = [];
     if (request.body) {
