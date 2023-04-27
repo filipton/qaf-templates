@@ -48,6 +48,18 @@ impl WasmResponse {
         }
     }
 
+    pub fn add_header(&mut self, key: &str, value: &str) {
+        self.headers.insert(key.to_string(), value.to_string());
+    }
+
+    pub fn add_body(&mut self, body: Vec<u8>) {
+        self.body = body;
+    }
+
+    pub fn add_status(&mut self, status: u16) {
+        self.status = status;
+    }
+
     pub fn with_header(self, key: &str, value: &str) -> Self {
         let mut headers = self.headers;
         headers.insert(key.to_string(), value.to_string());
@@ -109,9 +121,10 @@ pub async fn route(req: WasmRequest) -> Result<WasmResponse> {
     // here logic to route to different handlers
     // it should be in different file because it will be generated using build.rs
     //
-    let wasm_res = WasmResponse::ok("");
-    let wasm_res = wasm_res.with_header("Test1", "val1");
-    let wasm_res = wasm_res.with_header("Test1", "VaLL2");
+    let mut wasm_res = WasmResponse::ok("");
+    wasm_res.add_header("Content-Type", "text/plain");
+    wasm_res.add_body(format!("Hello from Rust! {:?}", req).as_bytes().to_vec());
+    wasm_res.add_status(201);
 
     return Ok(wasm_res);
 }
