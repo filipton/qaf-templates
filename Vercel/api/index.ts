@@ -32,27 +32,26 @@ export default async function handler(request: Request) {
     // @ts-ignore
     const headers = Array.from(request.headers.entries());
 
-    const rewIndexOf = request.url.indexOf('rew=');
-    let rewEnd = request.url.indexOf('&', rewIndexOf);
-    if (rewEnd === -1) {
-        rewEnd = request.url.length;
-    }
+    let url = new URL(request.url);
+    url.searchParams.delete('rew');
 
-    let url = request.url.substring(0, rewIndexOf) +
-        request.url.substring(rewEnd, request.url.length);
-    if (url[url.length - 1] === '?' || url[url.length - 1] === '&') {
-        url = url.substring(0, url.length - 1);
+    // @ts-ignore
+    let params = new Map<string, string>();
+    // @ts-ignore
+    for (const [key, value] of url.searchParams.entries()) {
+        params.set(key, value);
     }
 
     await init(wasm);
     let response: WasmResponse = await entry_point({
-        url: url,
+        url: url.pathname,
         method: request.method,
         headers: headers,
+        body: body,
+        params: params,
 
         // @ts-ignore
-        env: process.env as any,
-        body: body
+        env: process.env as any
     } as WasmRequest);
     let respBody = new Uint8Array(response.body);
 
@@ -66,10 +65,13 @@ export type WasmRequest = {
     url: string;
     method: string;
     headers: [string, string][];
+    body: number[];
+
+    // @ts-ignore
+    params: Map<string, string>;
 
     // @ts-ignore
     env: Map<string, string>;
-    body: number[];
 };
 
 export type WasmResponse = {
