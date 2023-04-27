@@ -16,13 +16,12 @@ pub struct WasmRequest {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct WasmResponse {
     status: u16,
-    headers: Vec<(String, String)>,
-    //         ^---- In future, this should be a HashMap
+    headers: HashMap<String, String>,
     body: Vec<u8>,
 }
 
 impl WasmResponse {
-    pub fn new(status: u16, headers: Vec<(String, String)>, body: Vec<u8>) -> Self {
+    pub fn new(status: u16, headers: HashMap<String, String>, body: Vec<u8>) -> Self {
         WasmResponse {
             status,
             headers,
@@ -33,22 +32,30 @@ impl WasmResponse {
     pub fn empty() -> Self {
         WasmResponse {
             status: 200,
-            headers: vec![],
+            headers: HashMap::new(),
             body: vec![],
         }
     }
 
     pub fn ok(content: &str) -> Self {
+        let mut headers = HashMap::new();
+        headers.insert("Content-Type".to_string(), "text/plain".to_string());
+
         WasmResponse {
             status: 200,
-            headers: vec![],
+            headers,
             body: content.as_bytes().to_vec(),
         }
     }
 
     pub fn with_header(self, key: &str, value: &str) -> Self {
         let mut headers = self.headers;
-        headers.push((key.to_string(), value.to_string()));
+        if let Some(h) = headers.get_mut(key) {
+            *h = value.to_string();
+        } else {
+            headers.insert(key.to_string(), value.to_string());
+        }
+
         WasmResponse {
             status: self.status,
             headers,
@@ -56,7 +63,7 @@ impl WasmResponse {
         }
     }
 
-    pub fn with_headers(self, headers: Vec<(String, String)>) -> Self {
+    pub fn with_headers(self, headers: HashMap<String, String>) -> Self {
         WasmResponse {
             status: self.status,
             headers,
@@ -86,25 +93,28 @@ impl WasmResponse {
 #[wasm_bindgen]
 pub async fn entry_point(input: JsValue) -> Result<JsValue, JsError> {
     let req: WasmRequest = serde_wasm_bindgen::from_value(input)?;
+    let resp = route(req).await;
+    return match resp {
+        Ok(resp) => Ok(serde_wasm_bindgen::to_value(&resp)?),
+        Err(err) => {
+            // if dev here
+            let resp = WasmResponse::new(
+                500,
+                HashMap::new(),
+                format!("Error: {:?}", err).as_bytes().to_vec(),
+            );
 
-    let wasm_res = WasmResponse {
-        status: 200,
-        headers: vec![("Content-Type".to_string(), "text/plain".to_string())],
-        body: vec![],
+            Ok(serde_wasm_bindgen::to_value(&resp)?)
+        }
     };
-
-    return Ok(serde_wasm_bindgen::to_value(&wasm_res)?);
 }
 
 pub async fn route(req: WasmRequest) -> Result<WasmResponse> {
     // here logic to route to different handlers
     // it should be in different file because it will be generated using build.rs
     //
-    let wasm_res = WasmResponse {
-        status: 200,
-        headers: vec![("Content-Type".to_string(), "text/plain".to_string())],
-        body: vec![],
-    };
+    let wasm_res = WasmResponse::ok("");
+    let number: u32 = "321f".parse()?;
 
     return Ok(wasm_res);
 }
