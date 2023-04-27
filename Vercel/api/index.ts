@@ -54,7 +54,6 @@ export default async function handler(request: Request) {
         env: process.env as any,
         body: body
     } as WasmRequest);
-
     let respBody = new Uint8Array(response.body);
 
     return new Response(respBody, {

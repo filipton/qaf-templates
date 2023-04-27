@@ -50,11 +50,7 @@ impl WasmResponse {
 
     pub fn with_header(self, key: &str, value: &str) -> Self {
         let mut headers = self.headers;
-        if let Some(h) = headers.get_mut(key) {
-            *h = value.to_string();
-        } else {
-            headers.insert(key.to_string(), value.to_string());
-        }
+        headers.insert(key.to_string(), value.to_string());
 
         WasmResponse {
             status: self.status,
@@ -114,7 +110,8 @@ pub async fn route(req: WasmRequest) -> Result<WasmResponse> {
     // it should be in different file because it will be generated using build.rs
     //
     let wasm_res = WasmResponse::ok("");
-    let number: u32 = "321f".parse()?;
+    let wasm_res = wasm_res.with_header("Test1", "val1");
+    let wasm_res = wasm_res.with_header("Test1", "VaLL2");
 
     return Ok(wasm_res);
 }
