@@ -3,6 +3,27 @@ use matchit::Router;
 use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, future::Future, pin::Pin, rc::Rc};
 
+/*
+        ,----,
+      ,/   .`|
+    ,`   .'  :
+  ;    ;     /              ,---,
+.'___,/    ,'  ,---.      ,---.'|   ,---.
+|    :     |  '   ,'\     |   | :  '   ,'\
+;    |.';  ; /   /   |    |   | | /   /   |
+`----'  |  |.   ; ,. :  ,--.__| |.   ; ,. :
+    '   :  ;'   | |: : /   ,'   |'   | |: :
+    |   |  ''   | .; :.   '  /  |'   | .; :
+    '   :  ||   :    |'   ; |:  ||   :    |
+    ;   |.'  \   \  / |   | '/  ' \   \  /
+    '---'     `----'  |   :    :|  `----'
+                       \   \  /
+                        `----'
+
+MOVE THIS FILE AWAY!!! MAYBE TO A SEPARATE CRATE
+          OBVIOUSLY SPLITTED INTO MULTIPLE FILES
+*/
+
 #[derive(Serialize, Deserialize, Debug)]
 pub struct WasmRequest {
     pub url: String,
@@ -22,6 +43,7 @@ pub struct WasmResponse {
 }
 
 impl WasmResponse {
+    #[allow(dead_code)]
     pub fn new(status: u16, headers: HashMap<String, String>, body: Vec<u8>) -> Self {
         WasmResponse {
             status,
@@ -30,6 +52,7 @@ impl WasmResponse {
         }
     }
 
+    #[allow(dead_code)]
     pub fn empty() -> Self {
         WasmResponse {
             status: 200,
@@ -38,6 +61,7 @@ impl WasmResponse {
         }
     }
 
+    #[allow(dead_code)]
     pub fn ok(content: &str) -> Self {
         let mut headers = HashMap::new();
         headers.insert("Content-Type".to_string(), "text/plain".to_string());
@@ -49,6 +73,7 @@ impl WasmResponse {
         }
     }
 
+    #[allow(dead_code)]
     pub fn not_found() -> Self {
         let mut headers = HashMap::new();
         headers.insert("Content-Type".to_string(), "text/plain".to_string());
@@ -60,18 +85,22 @@ impl WasmResponse {
         }
     }
 
+    #[allow(dead_code)]
     pub fn add_header(&mut self, key: &str, value: &str) {
         self.headers.insert(key.to_string(), value.to_string());
     }
 
+    #[allow(dead_code)]
     pub fn add_body(&mut self, body: Vec<u8>) {
         self.body = body;
     }
 
+    #[allow(dead_code)]
     pub fn add_status(&mut self, status: u16) {
         self.status = status;
     }
 
+    #[allow(dead_code)]
     pub fn with_header(self, key: &str, value: &str) -> Self {
         let mut headers = self.headers;
         headers.insert(key.to_string(), value.to_string());
@@ -83,6 +112,7 @@ impl WasmResponse {
         }
     }
 
+    #[allow(dead_code)]
     pub fn with_headers(self, headers: HashMap<String, String>) -> Self {
         WasmResponse {
             status: self.status,
@@ -91,6 +121,7 @@ impl WasmResponse {
         }
     }
 
+    #[allow(dead_code)]
     pub fn with_status(self, status: u16) -> Self {
         WasmResponse {
             status,
@@ -99,6 +130,7 @@ impl WasmResponse {
         }
     }
 
+    #[allow(dead_code)]
     pub fn with_body(self, body: Vec<u8>) -> Self {
         WasmResponse {
             status: self.status,
@@ -141,6 +173,7 @@ impl<'a> WasmRouter<'a> {
             .unwrap();
     }
 
+    #[allow(dead_code)]
     pub fn get<T>(mut self, path: &str, handler: fn(WasmRequest) -> T) -> Self
     where
         T: Future<Output = Result<WasmResponse>> + 'a,
@@ -149,6 +182,7 @@ impl<'a> WasmRouter<'a> {
         self
     }
 
+    #[allow(dead_code)]
     pub fn post<T>(mut self, path: &str, handler: fn(WasmRequest) -> T) -> Self
     where
         T: Future<Output = Result<WasmResponse>> + 'a,
@@ -157,6 +191,7 @@ impl<'a> WasmRouter<'a> {
         self
     }
 
+    #[allow(dead_code)]
     pub fn put<T>(mut self, path: &str, handler: fn(WasmRequest) -> T) -> Self
     where
         T: Future<Output = Result<WasmResponse>> + 'a,
@@ -165,6 +200,7 @@ impl<'a> WasmRouter<'a> {
         self
     }
 
+    #[allow(dead_code)]
     pub fn delete<T>(mut self, path: &str, handler: fn(WasmRequest) -> T) -> Self
     where
         T: Future<Output = Result<WasmResponse>> + 'a,
@@ -173,6 +209,7 @@ impl<'a> WasmRouter<'a> {
         self
     }
 
+    #[allow(dead_code)]
     pub fn head<T>(mut self, path: &str, handler: fn(WasmRequest) -> T) -> Self
     where
         T: Future<Output = Result<WasmResponse>> + 'a,
@@ -181,6 +218,7 @@ impl<'a> WasmRouter<'a> {
         self
     }
 
+    #[allow(dead_code)]
     pub fn options<T>(mut self, path: &str, handler: fn(WasmRequest) -> T) -> Self
     where
         T: Future<Output = Result<WasmResponse>> + 'a,
@@ -189,6 +227,7 @@ impl<'a> WasmRouter<'a> {
         self
     }
 
+    #[allow(dead_code)]
     pub fn connect<T>(mut self, path: &str, handler: fn(WasmRequest) -> T) -> Self
     where
         T: Future<Output = Result<WasmResponse>> + 'a,
@@ -197,6 +236,7 @@ impl<'a> WasmRouter<'a> {
         self
     }
 
+    #[allow(dead_code)]
     pub fn patch<T>(mut self, path: &str, handler: fn(WasmRequest) -> T) -> Self
     where
         T: Future<Output = Result<WasmResponse>> + 'a,
@@ -205,6 +245,7 @@ impl<'a> WasmRouter<'a> {
         self
     }
 
+    #[allow(dead_code)]
     pub fn trace<T>(mut self, path: &str, handler: fn(WasmRequest) -> T) -> Self
     where
         T: Future<Output = Result<WasmResponse>> + 'a,

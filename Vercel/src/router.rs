@@ -8,7 +8,10 @@ pub mod pages {
 }
 
 pub async fn route(req: WasmRequest) -> Result<WasmResponse> {
-    let router = WasmRouter::new().get("/", pages::test::test);
+    let router = WasmRouter::new()
+        .get("/", pages::test::test)
+        .get("/test", pages::test::test2)
+        .post("/test", pages::test::test_post);
 
     let matched = router.routes.get(&req.method).unwrap().at(&req.url)?;
     let handler = matched.value;
