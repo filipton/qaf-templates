@@ -1,6 +1,6 @@
 use anyhow::Result;
 use std::collections::HashMap;
-use structs::{WasmRequest, WasmResponse};
+use structs::{WasmRequest, WasmResponse, WasmRouter};
 use wasm_bindgen::prelude::*;
 use web_sys::console;
 
