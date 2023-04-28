@@ -5,15 +5,24 @@ use qaf_router::{WasmRequest, WasmResponse, WasmRouter};
 #[path = "pages"]
 pub mod pages {
     pub mod test;
+    #[path = ":id"]
+    pub mod _id {
+        pub mod cxz;
+    }
 }
 
-pub async fn route(req: WasmRequest) -> Result<WasmResponse> {
+pub async fn route(mut req: WasmRequest) -> Result<WasmResponse> {
     let router = WasmRouter::new()
         .get("/", pages::test::test)
         .get("/test", pages::test::test2)
-        .post("/test", pages::test::test_post);
+        .post("/test", pages::test::test_post)
+        .get("/:id", pages::_id::cxz::test_cxz);
 
     let matched = router.routes.get(&req.method).unwrap().at(&req.url)?;
+    matched.params.iter().for_each(|(k, v)| {
+        req.params.insert(k.to_string(), v.to_string());
+    });
+
     let handler = matched.value;
     let resp = handler(req).await;
 

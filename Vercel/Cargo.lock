@@ -529,9 +529,7 @@ checksum = "1fb8a8103f3521f926d8311c00a798413565bedc744ceac95352cf98096ebe34"
 
 [[package]]
 name = "qaf-router"
-version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8885258abc36fa2669ac2a1ca28b1e9d78981a826921865978a2177ec31ec88b"
+version = "0.1.1"
 dependencies = [
  "anyhow",
  "matchit",

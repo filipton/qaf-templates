@@ -15,11 +15,15 @@ fn main() -> Result<()> {
 
     let routes = format!(
         r#"
-        pub async fn route(req: WasmRequest) -> Result<WasmResponse> {{
+        pub async fn route(mut req: WasmRequest) -> Result<WasmResponse> {{
             let router = WasmRouter::new()
                 {};
 
             let matched = router.routes.get(&req.method).unwrap().at(&req.url)?;
+            matched.params.iter().for_each(|(k, v)| {{
+                req.params.insert(k.to_string(), v.to_string());
+            }});
+
             let handler = matched.value;
             let resp = handler(req).await;
 

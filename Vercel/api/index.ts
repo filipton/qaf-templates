@@ -36,10 +36,10 @@ export default async function handler(request: Request) {
     url.searchParams.delete('rew');
 
     // @ts-ignore
-    let params = new Map<string, string>();
+    let query = new Map<string, string>();
     // @ts-ignore
     for (const [key, value] of url.searchParams.entries()) {
-        params.set(key, value);
+        query.set(key, value);
     }
 
     await init(wasm);
@@ -48,7 +48,10 @@ export default async function handler(request: Request) {
         method: request.method,
         headers: headers,
         body: body,
-        params: params,
+        query: query,
+
+        // @ts-ignore
+        params: new Map<string, string>(),
 
         // @ts-ignore
         env: process.env as any
@@ -69,6 +72,9 @@ export type WasmRequest = {
 
     // @ts-ignore
     params: Map<string, string>;
+
+    // @ts-ignore
+    query: Map<string, string>;
 
     // @ts-ignore
     env: Map<string, string>;
