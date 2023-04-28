@@ -1,6 +1,6 @@
-use crate::structs::{WasmRequest, WasmResponse};
 use anyhow::Result;
 use qaf_macros::{get, post};
+use qaf_router::{WasmRequest, WasmResponse};
 
 #[get("")]
 pub async fn test(req: WasmRequest) -> Result<WasmResponse> {

@@ -1,11 +1,10 @@
 use anyhow::Result;
+use qaf_router::{WasmRequest, WasmResponse};
 use std::collections::HashMap;
-use structs::{WasmRequest, WasmResponse, WasmRouter};
 use wasm_bindgen::prelude::*;
 use web_sys::console;
 
 mod router;
-mod structs;
 
 #[wasm_bindgen]
 pub async fn entry_point(input: JsValue) -> Result<JsValue, JsError> {
