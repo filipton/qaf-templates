@@ -4,6 +4,6 @@ use qaf_router::{WasmRequest, WasmResponse};
 
 #[get("")]
 pub async fn test_cxz(req: WasmRequest) -> Result<WasmResponse> {
-    let res = WasmResponse::ok(&format!("{:?}", req.params));
+    let res = WasmResponse::ok(&format!("{:?} {:?}", req.params, req.query));
     Ok(res)
 }

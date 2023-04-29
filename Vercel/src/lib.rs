@@ -1,5 +1,5 @@
 use anyhow::Result;
-use qaf_router::{WasmRequest, WasmResponse, WasmRouter};
+use qaf_router::{WasmRequest, WasmResponse};
 use std::collections::HashMap;
 use wasm_bindgen::prelude::*;
 use web_sys::console;
