@@ -24,7 +24,9 @@ serde-wasm-bindgen = "0.5.0"
 reqwest = "0.11.16"
 anyhow = "1.0.70"
 qaf-router = { path = "../../qaf-router", version = "0.1.1" }
+#[[IF DATABASE Planetscale]]
 planetscale-driver = "0.2.3"
+#[[ENDIF]]
 
 [build-dependencies]
 qaf-build-utils = "0.1.0"

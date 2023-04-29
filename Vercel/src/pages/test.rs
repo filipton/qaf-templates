@@ -1,7 +1,9 @@
 use anyhow::Result;
-use planetscale_driver::{query, PSConnection};
 use qaf_macros::{get, post};
 use qaf_router::{WasmRequest, WasmResponse};
+//[[IF DATABASE Planetscale]]
+use planetscale_driver::query;
+//[[ENDIF]]
 
 #[get("")]
 pub async fn test(req: WasmRequest) -> Result<WasmResponse> {
