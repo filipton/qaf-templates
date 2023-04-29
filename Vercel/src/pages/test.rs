@@ -9,17 +9,15 @@ pub async fn test(req: WasmRequest) -> Result<WasmResponse> {
     Ok(res)
 }
 
+//[[IF DATABASE Planetscale]]
 #[get("test")]
 pub async fn test2(req: WasmRequest) -> Result<WasmResponse> {
-    let mut conn = PSConnection::new(
-        req.env.get("PS_HOST").unwrap(),
-        req.env.get("PS_USER").unwrap(),
-        req.env.get("PS_PASS").unwrap(),
-    );
+    let mut conn = crate::get_ps_conn(&req)?;
     let val: u32 = query("SELECT 69420").fetch_scalar(&mut conn).await?;
     let res = WasmResponse::ok(&format!("Value: {}", val));
     Ok(res)
 }
+//[[ENDIF]]
 
 #[post("test")]
 pub async fn test_post(req: WasmRequest) -> Result<WasmResponse> {

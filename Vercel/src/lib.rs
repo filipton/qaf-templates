@@ -26,3 +26,14 @@ pub async fn entry_point(input: JsValue) -> Result<JsValue, JsError> {
         }
     };
 }
+
+//[[IF DATABASE Planetscale]]
+pub fn get_ps_conn(req: &WasmRequest) -> Result<planetscale_driver::PSConnection> {
+    let conn = planetscale_driver::PSConnection::new(
+        req.env.get("PS_HOST").unwrap(),
+        req.env.get("PS_USER").unwrap(),
+        req.env.get("PS_PASS").unwrap(),
+    );
+    Ok(conn)
+}
+//[[ENDIF]]
