@@ -27,7 +27,7 @@ anyhow = "1.0.70"
 qaf-router = "0.1.1"
 
 #[[IF DATABASE Planetscale]]
-planetscale-driver = "0.2.3"
+planetscale-driver = "*"
 #[[ENDIF]]
 
 [build-dependencies]
