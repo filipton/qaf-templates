@@ -6,34 +6,34 @@ build = "build.rs"
 
 [dependencies]
 actix-web = "4.3.1"
-dotenvy = "0.15.6"
+dotenvy = "0.15.7"
 rand = "0.8.5"
-tokio = { version = "1.26.0", features = ["full"] }
+tokio = { version = "1.29.1", features = ["full"] }
 #[[IF DATABASE Postgres(SQLX)]]
-sqlx = { version = "0.6.3", features = [
+sqlx = { version = "0.7.0", features = [
     "postgres",
     "macros",
     "runtime-tokio-rustls",
 ] }
 #[[ENDIF]]
 #[[IF DATABASE Mysql(SQLX)]]
-sqlx = { version = "0.6.3", features = [
+sqlx = { version = "0.7.0", features = [
     "mysql",
     "macros",
     "runtime-tokio-rustls",
 ] }
 #[[ENDIF]]
 #[[IF WEBSOCKET Tungstenite]]
-tokio-tungstenite = "0.18.0"
-futures-channel = "0.3.27"
-futures-util = "0.3.27"
+tokio-tungstenite = "0.19.0"
+futures-channel = "0.3.28"
+futures-util = "0.3.28"
 #[[ENDIF]]
 
 [build-dependencies]
 qaf-build-utils = "0.1.0"
-serde = { version = "1.0.159", features = ["derive"] }
-anyhow = "1.0.70"
-serde_json = "1.0.95"
+serde = { version = "1.0.166", features = ["derive"] }
+anyhow = "1.0.71"
+serde_json = "1.0.99"
 rust-format = "0.3.4"
 
 [profile.release]
