@@ -10,19 +10,19 @@ crate-type = ["cdylib", "rlib"]
 default = ["console_error_panic_hook"]
 
 [dependencies]
-wasm-bindgen = "0.2.84"
-console_error_panic_hook = { version = "0.1.6", optional = true }
+wasm-bindgen = "0.2.87"
+console_error_panic_hook = { version = "0.1.7", optional = true }
 wee_alloc = { version = "0.4.5", optional = true }
 
 qaf-macros = { version = "0.2.2", features = ["cloudflare"] }
-wasm-bindgen-futures = "0.4.34"
-url = "2.3.1"
-web-sys = { version = "0.3.61", features = ["console"] }
-serde = { version = "1.0.160", features = ["derive"] }
-serde_json = "1.0.96"
+wasm-bindgen-futures = "0.4.37"
+url = "2.4.0"
+web-sys = { version = "0.3.64", features = ["console"] }
+serde = { version = "1.0.166", features = ["derive"] }
+serde_json = "1.0.99"
 serde-wasm-bindgen = "0.5.0"
-reqwest = "0.11.16"
-anyhow = "1.0.70"
+reqwest = "0.11.18"
+anyhow = "1.0.71"
 #qaf-router = { path = "../../qaf-router", version = "0.1.1" }
 qaf-router = "0.1.1"
 
@@ -32,9 +32,9 @@ planetscale-driver = "*"
 
 [build-dependencies]
 qaf-build-utils = "0.1.0"
-serde = { version = "1.0.159", features = ["derive"] }
-anyhow = "1.0.70"
-serde_json = "1.0.95"
+serde = { version = "1.0.166", features = ["derive"] }
+anyhow = "1.0.71"
+serde_json = "1.0.99"
 rust-format = "0.3.4"
 
 [profile.release]
